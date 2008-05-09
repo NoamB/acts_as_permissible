@@ -72,6 +72,12 @@ class PermissableGenerator < Rails::Generator::NamedBase
           m.template 'role_membership_model_spec.rb',
                       File.join('spec/models',
                                 "#{role_model_file_name}_membership_spec.rb")
+          m.template 'role_model_fixtures.yml',
+                      File.join('spec/fixtures',
+                                "#{role_model_file_name.pluralize}.yml")
+          m.template 'role_membership_model_fixtures.yml',
+                      File.join('spec/fixtures',
+                                "#{role_membership_model_file_name.pluralize}.yml")
         end
       # else
       #   m.template 'unit_test.rb',

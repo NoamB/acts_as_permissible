@@ -75,5 +75,6 @@ Copyright (c) 2008 Noam Ben-Ari, released under the MIT license
 
         
         # TODO:
+		# add has_role?
         # add recursive permissions loading and clearing methods
 		# acts_as_permissable_system that includes controller stuff like before_filters.
