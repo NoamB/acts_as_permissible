@@ -1,0 +1,79 @@
+ActsAsPermissable
+=================
+
+This plugin enables any activerecord model to have permissions.
+It provides a set of methods for querying the model's permissions.
+In addition, the plugin can generate roles support, which turns in into a full RBAC (Role Based Access Control) solution.
+
+Any model which includes the line "acts_as_permissable" can have permissions, and with roles support it can also have roles which in turn have their own permissions.
+Roles can also belong to roles, which creates a sort of inheritance hierarchy.
+When permissions are calculated, the model's permissions are merged with the model's role permissions (if any), which in turn are merged with the role's roles permissions, until a finite permissions hash is generated.
+In the case of identical keys, a false value overrides a true value. A nil value is false.
+
+Setup
+=====
+script/generate permissable <PermissionModelName> [RoleModelName]
+
+The role model name is optional. If you do not want the roles support generated, use the --skip-roles option.
+
+examples: script/generate permissable Permission Role
+		  script/generate permissable Permission Group
+		  script/generate permissable Allowance --skip-roles
+
+use --skip-migration if you don't want a migration created for the permissions model.
+
+use --rspec to force rspec tests installed (currenty these are the only ones available).
+
+Add any permissions you want to your permissions table.
+Add any roles you want to your roles table.
+Add user->role relationships in your roles_memberships table.
+Add role->role relationships in your roles_memberships table.
+
+Important
+=========
+add these lines to any model which acts_as_permissable and has roles:
+
+	has_many :role_memberships, :as => :roleable
+	has_many :roles, :through => :role_memberships
+
+if you chose a different roles model name, modify the names as needed, except the :as => :roleable part.
+For example, if you chose to use the model name Group instead of Role, the lines should look like this:
+
+	has_many :group_memberships, :as => :roleable
+	has_many :groups, :through => :group_memberships
+
+Usage
+=====
+
+	class User < Activerecord::Base
+		acts_as_permissable
+	end
+
+Now a user will have the following methods:
+
+	@user.permissions_hash() # => {:view_something => true, :delete_something => false}
+
+	@user.has_permission?("view_something") # => true
+	@user.has_permission?("view_something", "delete_something") # => false
+	@user.has_permission?("delete_something") # => false
+	@user.has_permission?("create_something") # => false
+
+	@user.permissions_hash() # => {:view_something => true, :delete_something => false}
+	@user.permissions << Permission.new(:action => "new_thing", :granted => true)
+	@user.permissions_hash() # => {:view_something => true, :delete_something => false}
+	@user.reload_permissions!() # => {:view_something => true, :delete_something => false, :new_thing => true}
+	@user.permissions_hash() # => {:view_something => true, :delete_something => false, :new_thing => true}
+	# this is useful for getting the hash again into memory after the permissions table was updated.
+
+And with roles support:
+
+	@user.has_role?("publisher") # => true
+	@user.has_role?("publisher","advertiser") # => false
+	@user.full_permissions_hash() # will return a merged hash of user and roles permissions.
+	
+Copyright (c) 2008 Noam Ben-Ari, released under the MIT license
+
+        
+        # TODO:
+        # add recursive permissions loading and clearing methods
+		# acts_as_permissable_system that includes controller stuff like before_filters.
