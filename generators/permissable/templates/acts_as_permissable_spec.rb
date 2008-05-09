@@ -73,7 +73,7 @@ describe "acts_as_permissable" do
       reloaded_hash.keys.should include(:add_something)
     end
   end
-  
+  <% unless options[:skip_roles] %>
   describe "<%= role_model_file_name.pluralize %>_list" do
     it "should return the correct list" do
       @perm.<%= role_model_file_name.pluralize %>_list.should == []
@@ -146,4 +146,46 @@ describe "acts_as_permissable" do
       @perm.in_any_<%= role_model_file_name %>?("mutables","immutables").should == true
     end
   end
+  
+  describe "full_permissions_hash" do
+    before(:each) do
+      @mutables = <%= role_model_name %>.new(:name => "mutables")
+      @mutables.save!
+      @mutable_permission = <%= class_name %>.new(:permissable_id => @mutables.id, :permissable_type => @mutables.class.to_s, :action => "view_something", :granted => false)
+      @mutable_permission.save!
+      @immutables = <%= role_model_name %>.new(:name => "immutables")
+      @immutables.save!
+      @immutable_permission = <%= class_name %>.new(:permissable_id => @immutables.id, :permissable_type => @immutables.class.to_s, :action => "download_something", :granted => true)
+      @immutable_permission.save!
+    end
+    
+    it "should return the correct hash if object doesn't belong to <%= role_model_file_name.pluralize %>" do
+      @perm.<%= role_model_file_name.pluralize %>.should == []
+      @perm.full_permissions_hash.should == {:view_something=>true, :delete_something=>false}
+    end
+    
+    it "should return the correct hash if object belongs to one <%= role_model_file_name %>" do
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.full_permissions_hash.should == {:view_something=>false, :delete_something=>false}
+    end
+    
+    it "should return the correct hash if object belongs to one <%= role_model_file_name %> which belongs to another <%= role_model_file_name %>" do
+      @mutables.<%= role_model_file_name.pluralize %> << @immutables
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.full_permissions_hash.should == {:view_something=>false, :delete_something=>false, :download_something=>true}
+    end
+    
+    it "should return the correct hash if object belongs to 2 <%= role_model_file_name.pluralize %>" do
+      @perm.<%= role_model_file_name.pluralize %> << @immutables
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.full_permissions_hash.should == {:view_something=>false, :delete_something=>false, :download_something=>true}
+    end
+    
+    after(:each) do
+      @mutables.destroy
+      @immutables.destroy
+      @perm.<%= role_model_file_name.pluralize %>.reset
+    end
+  end
+  <% end %>
 end

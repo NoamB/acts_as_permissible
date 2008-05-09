@@ -58,5 +58,13 @@ describe "<%= role_membership_model_name %>" do
       @membership.should_not be_valid
     end
     
+    # <%= role_model_file_name.pluralize %> cannot belong to each other in a cycle
+    it "should not a allow a <%= role_model_file_name %> to belong to a <%= role_model_file_name %> which belongs to it" do
+      @membership.save!
+      @membership2 = <%= role_membership_model_name %>.new(:roleable_id => 2, :roleable_type => "<%= role_model_name %>", :<%= role_model_file_name %>_id => 1)
+      @membership2.should_not be_valid
+      @membership2.errors.full_messages.should include("A <%= role_model_file_name %> cannot belong to a <%= role_model_file_name %> which belongs to it.")
+      @membership.destroy
+    end
   end
 end

@@ -66,7 +66,6 @@ module NoamBenAri
           reset_permissions!
           permissions_hash
         end
-        
         <% unless options[:skip_roles] %>
         def <%= role_model_file_name %>s_list
           list = []
@@ -81,34 +80,22 @@ module NoamBenAri
         def in_any_<%= role_model_file_name %>?(*<%= role_model_file_name %>_names)
           <%= role_model_file_name %>_names.any? {|<%= role_model_file_name %>| <%= role_model_file_name %>s_list.include?(<%= role_model_file_name %>) }
         end
-        <% end %>
         
+        def full_permissions_hash
+          permissions_hash
+          <%= role_model_file_name.pluralize %>.each do |<%= role_model_file_name %>|
+            merge_permissions!(<%= role_model_file_name %>.full_permissions_hash)
+          end
+          permissions_hash
+        end
+        <% end %>
         private
         # Nilifies permissions_hash instance variable.
         def reset_permissions!
           @permissions_hash = nil
-          #permissions.reset #FIXME: is this needed or not? tests say no.
         end
-        
-        
-        # # load associated objects' permissions and merge them into a hash recursively.
-        # # in the case of duplicate keys, a 'false' value will win over a 'true' value.
-        # def load_permissions_recursively(associated_collection_name = self.class.name.downcase.pluralize.to_sym)
-        #   self.load_permissions
-        #   self.send(associated_collection_name).each do |associated_obj|
-        #     associated_obj_permissions = associated_obj.load_permissions_recursively(associated_collection_name)
-        #     self.merge_permissions!(associated_obj_permissions)
-        #   end
-        #   return @permissions_hash
-        # end
-        # 
-        # def reset_permissions_recursively(associated_collection_name = self.class.name.downcase.pluralize.to_sym)
-        #   self.send(associated_collection_name).each { |associated_obj| associated_obj.reset_permissions_recursively(associated_collection_name) }
-        #   self.reset_permissions
-        #   self.send(associated_collection_name).reset
-        # end   
+          
       end
-      
     end
   end
 end
