@@ -67,14 +67,14 @@ Now a user will have the following methods:
 
 And with roles support:
 
-	@user.has_role?("publisher") # => true
-	@user.has_role?("publisher","advertiser") # => false
+	@user.in_role?("publisher") # => true
+	@user.in_role?("publisher","advertiser") # => false
+	@user.in_any_role?("publisher","advertiser") => true
 	@user.full_permissions_hash() # will return a merged hash of user and roles permissions.
 	
 Copyright (c) 2008 Noam Ben-Ari, released under the MIT license
 
         
         # TODO:
-		# add has_role?
         # add recursive permissions loading and clearing methods
 		# acts_as_permissable_system that includes controller stuff like before_filters.

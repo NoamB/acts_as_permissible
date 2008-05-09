@@ -1,37 +1,37 @@
 one:
     id: 1
     permissable_id: 7
-    permissable_type: <%= class_name %>
+    permissable_type: "<%= class_name %>"
     action: "view_something"
     granted: 1
 two:
     id: 2
     permissable_id: 7
-    permissable_type: <%= class_name %>
+    permissable_type: "<%= class_name %>"
     action: "delete_something"
     granted: 0
 three:
     id: 3
     permissable_id: 8
-    permissable_type: <%= class_name %>
+    permissable_type: "<%= class_name %>"
     action: "view_something"
     granted: 1
 four:
     id: 4
     permissable_id: 8
-    permissable_type: <%= class_name %>
+    permissable_type: "<%= class_name %>"
     action: "delete_something"
     granted: 1
 five:
     id: 5
     permissable_id: 8
-    permissable_type: <%= class_name %>
+    permissable_type: "<%= class_name %>"
     action: "update_something"
     granted: 1
 six:
     id: 6
     permissable_id: 8
-    permissable_type: <%= class_name %>
+    permissable_type: "<%= class_name %>"
     action: "create_something"
     granted: 0
 perm:

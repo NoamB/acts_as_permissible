@@ -73,4 +73,77 @@ describe "acts_as_permissable" do
       reloaded_hash.keys.should include(:add_something)
     end
   end
+  
+  describe "<%= role_model_file_name.pluralize %>_list" do
+    it "should return the correct list" do
+      @perm.<%= role_model_file_name.pluralize %>_list.should == []
+      @mutables = <%= role_model_name %>.new(:name => "mutables")
+      @mutables.save!
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.<%= role_model_file_name.pluralize %>_list.size.should == 1
+      @perm.<%= role_model_file_name.pluralize %>_list.should include("mutables")
+      @mutables.destroy
+      @perm.<%= role_model_file_name.pluralize %>.reset
+      @perm.<%= role_model_file_name.pluralize %>_list.should == []
+    end
+  end
+  
+  describe "in_<%= role_model_file_name %>?" do
+    before(:each) do
+      @mutables = <%= role_model_name %>.new(:name => "mutables")
+      @mutables.save!
+      @immutables = <%= role_model_name %>.new(:name => "immutables")
+      @immutables.save!
+    end
+    
+    it "should return true if member of one" do
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.in_<%= role_model_file_name %>?("mutables").should == true
+    end
+    
+    it "should return false if not a member" do
+      @perm.in_<%= role_model_file_name %>?("mutables").should == false
+    end
+    
+    it "should return true if member of all" do
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.<%= role_model_file_name.pluralize %> << @immutables
+      @perm.in_<%= role_model_file_name %>?("mutables","immutables").should == true
+    end
+    
+    it "should return false if member of some" do
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.in_<%= role_model_file_name %>?("mutables","immutables").should == false
+    end
+    
+    after(:each) do
+      @mutables.destroy
+      @immutables.destroy
+      @perm.<%= role_model_file_name.pluralize %>.reset
+    end
+  end
+  
+  describe "in_any_<%= role_model_file_name %>?" do
+    before(:each) do
+      @mutables = <%= role_model_name %>.new(:name => "mutables")
+      @mutables.save!
+      @immutables = <%= role_model_name %>.new(:name => "immutables")
+      @immutables.save!
+    end
+    
+    it "should return true if member of one" do
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.in_any_<%= role_model_file_name %>?("mutables","immutables").should == true
+    end
+    
+    it "should return false if not a member" do
+      @perm.in_any_<%= role_model_file_name %>?("mutables","immutables").should == false
+    end
+    
+    it "should return true if member of all" do
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.<%= role_model_file_name.pluralize %> << @immutables
+      @perm.in_any_<%= role_model_file_name %>?("mutables","immutables").should == true
+    end
+  end
 end
