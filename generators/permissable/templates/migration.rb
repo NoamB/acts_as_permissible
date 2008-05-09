@@ -1,8 +1,8 @@
 class <%= migration_name %> < ActiveRecord::Migration
   def self.up
     create_table "<%= table_name %>", :force => true do |t|
-      t.integer :permissable_id
-      t.string :permissable_type
+      t.integer :permissible_id
+      t.string :permissible_type
       t.string :action
       t.boolean :granted
 

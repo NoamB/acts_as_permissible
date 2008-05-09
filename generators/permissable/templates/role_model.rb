@@ -8,5 +8,5 @@ class <%= role_model_name %> < ActiveRecord::Base
   
   validates_uniqueness_of :name
   
-  acts_as_permissable
+  acts_as_permissible
 end

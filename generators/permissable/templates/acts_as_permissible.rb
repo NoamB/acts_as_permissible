@@ -1,21 +1,21 @@
-# ActsAsPermissable
+# ActsAsPermissible
 module NoamBenAri
   module Acts #:nodoc:
-    module Permissable #:nodoc:
+    module Permissible #:nodoc:
 
       def self.included(base)
         base.extend ClassMethods  
       end
 
       module ClassMethods
-        def acts_as_permissable
-          has_many :<%= table_name %>, :as => :permissable, :dependent => :destroy
+        def acts_as_permissible
+          has_many :<%= table_name %>, :as => :permissible, :dependent => :destroy
           <% unless options[:skip_roles] %>
           has_many :<%= role_membership_model_file_name.pluralize %>, :as => :roleable, :dependent => :destroy
           has_many :<%= role_model_file_name.pluralize %>, :through => :<%= role_membership_model_file_name.pluralize %>, :source => :<%= role_model_file_name %>
           <% end %>
-          include NoamBenAri::Acts::Permissable::InstanceMethods
-          extend NoamBenAri::Acts::Permissable::SingletonMethods
+          include NoamBenAri::Acts::Permissible::InstanceMethods
+          extend NoamBenAri::Acts::Permissible::SingletonMethods
         end
       end
       
@@ -25,10 +25,10 @@ module NoamBenAri
         # Helper method to lookup for permissions for a given object.
         # This method is equivalent to obj.permissions.
         def find_permissions_for(obj)
-          permissable = ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s
+          permissible = ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s
          
           <%= class_name %>.find(:all,
-            :conditions => ["permissable_id = ? and permissable_type = ?", obj.id, permissable]
+            :conditions => ["permissible_id = ? and permissible_type = ?", obj.id, permissible]
           )
         end
       end
@@ -55,7 +55,7 @@ module NoamBenAri
           perms.any? {|perm| permissions_hash.include?(perm.to_sym) && (permissions_hash[perm.to_sym] == true) }
         end
         
-        # Merges another permissable object's permissions into this permissable's permissions hash
+        # Merges another permissible object's permissions into this permissible's permissions hash
         # In the case of identical keys, a false value wins over a true value.
         def merge_permissions!(other_permissions_hash)
           permissions_hash.merge!(other_permissions_hash) {|key,oldval,newval| oldval.nil? ? newval : oldval && newval}

@@ -1,10 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 class <%= class_name %> < ActiveRecord::Base
-  acts_as_permissable
+  acts_as_permissible
 end
 
-describe "acts_as_permissable" do
+describe "acts_as_permissible" do
   fixtures :<%= table_name %>
   
   before(:each) do
@@ -151,11 +151,11 @@ describe "acts_as_permissable" do
     before(:each) do
       @mutables = <%= role_model_name %>.new(:name => "mutables")
       @mutables.save!
-      @mutable_permission = <%= class_name %>.new(:permissable_id => @mutables.id, :permissable_type => @mutables.class.to_s, :action => "view_something", :granted => false)
+      @mutable_permission = <%= class_name %>.new(:permissible_id => @mutables.id, :permissible_type => @mutables.class.to_s, :action => "view_something", :granted => false)
       @mutable_permission.save!
       @immutables = <%= role_model_name %>.new(:name => "immutables")
       @immutables.save!
-      @immutable_permission = <%= class_name %>.new(:permissable_id => @immutables.id, :permissable_type => @immutables.class.to_s, :action => "download_something", :granted => true)
+      @immutable_permission = <%= class_name %>.new(:permissible_id => @immutables.id, :permissible_type => @immutables.class.to_s, :action => "download_something", :granted => true)
       @immutable_permission.save!
     end
     

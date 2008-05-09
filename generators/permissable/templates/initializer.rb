@@ -1,2 +1,2 @@
-require 'lib/acts_as_permissable'
-ActiveRecord::Base.send(:include, NoamBenAri::Acts::Permissable)
+require 'lib/acts_as_permissible'
+ActiveRecord::Base.send(:include, NoamBenAri::Acts::Permissible)

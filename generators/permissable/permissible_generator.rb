@@ -1,5 +1,5 @@
-#require 'acts_as_permissable/rails_commands'
-class PermissableGenerator < Rails::Generator::NamedBase
+#require 'acts_as_permissible/rails_commands'
+class PermissibleGenerator < Rails::Generator::NamedBase
   default_options :skip_migrations => false, :skip_timestamps => false
 
   attr_reader :role_model_name
@@ -39,12 +39,12 @@ class PermissableGenerator < Rails::Generator::NamedBase
                   File.join('app/models',
                             class_path,
                             "#{file_name}.rb")
-      m.template 'acts_as_permissable.rb',
+      m.template 'acts_as_permissible.rb',
                   File.join('lib',
-                            "acts_as_permissable.rb")
+                            "acts_as_permissible.rb")
       m.template 'initializer.rb',
                   File.join('config/initializers',
-                            "acts_as_permissable_init.rb")
+                            "acts_as_permissible_init.rb")
       unless options[:skip_roles]
         m.template 'role_model.rb',
                     File.join('app/models',
@@ -62,9 +62,9 @@ class PermissableGenerator < Rails::Generator::NamedBase
         m.template 'fixtures.yml',
                           File.join('spec/fixtures',
                                     "#{table_name}.yml")
-        m.template 'acts_as_permissable_spec.rb',
+        m.template 'acts_as_permissible_spec.rb',
                           File.join('spec/models',
-                                    "acts_as_permissable_spec.rb")
+                                    "acts_as_permissible_spec.rb")
         unless options[:skip_roles]
           m.template 'role_model_spec.rb',
                       File.join('spec/models',
@@ -111,7 +111,7 @@ class PermissableGenerator < Rails::Generator::NamedBase
         puts
         puts ("-" * 70)
         puts 
-        puts "acts_as_permissable"
+        puts "acts_as_permissible"
         puts
         puts ("-" * 70)
         puts
@@ -119,7 +119,7 @@ class PermissableGenerator < Rails::Generator::NamedBase
         puts
         puts ("-" * 70)
         puts
-        puts "Thanks for using acts_as_permissable"
+        puts "Thanks for using acts_as_permissible"
         puts
         puts ("-" * 70)
         puts
@@ -136,7 +136,7 @@ class PermissableGenerator < Rails::Generator::NamedBase
   
   protected
     def banner
-      "Usage: #{$0} permissable <PermissionsModelName> [RoleModelName]"
+      "Usage: #{$0} permissible <PermissionsModelName> [RoleModelName]"
     end
 
     def add_options!(opt)
