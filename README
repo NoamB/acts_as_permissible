@@ -30,19 +30,6 @@ Add any roles you want to your roles table.
 Add user->role relationships in your roles_memberships table.
 Add role->role relationships in your roles_memberships table.
 
-Important
-=========
-add these lines to any model which acts_as_permissible and has roles:
-
-	has_many :role_memberships, :as => :roleable
-	has_many :roles, :through => :role_memberships
-
-if you chose a different roles model name, modify the names as needed, except the :as => :roleable part.
-For example, if you chose to use the model name Group instead of Role, the lines should look like this:
-
-	has_many :group_memberships, :as => :roleable
-	has_many :groups, :through => :group_memberships
-
 Usage
 =====
 
