@@ -65,3 +65,4 @@ Copyright (c) 2008 Noam Ben-Ari, released under the MIT license
         
         TODO:
 		# acts_as_permissible_system that includes controller stuff like before_filters.
+		# admin interface scaffold for permissions and roles.
