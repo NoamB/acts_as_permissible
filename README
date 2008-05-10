@@ -1,4 +1,4 @@
-ActsAsPermissable
+ActsAsPermissible
 =================
 
 This plugin enables any activerecord model to have permissions.
