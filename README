@@ -8,7 +8,8 @@ In addition, the plugin can generate roles support, which turns in into a full R
 Any model which includes the line "acts_as_permissible" can have permissions, and with roles support it can also have roles which in turn have their own permissions.
 Roles can also belong to roles, which creates a sort of inheritance hierarchy.
 When permissions are calculated, the model's permissions are merged with the model's role permissions (if any), which in turn are merged with the role's roles permissions, until a finite permissions hash is generated.
-In the case of identical keys, a false value overrides a true value. A nil value is false.
+
+In the case of identical keys, a false value overrides a true value, A true value overrides a nil value, and a nil value is false.
 
 Setup
 =====
