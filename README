@@ -76,5 +76,6 @@ And with roles support:
 Copyright (c) 2008 Noam Ben-Ari, released under the MIT license
 
         
-        # TODO:
+        TODO:
+		# prevent cyclical role hierarchies.
 		# acts_as_permissible_system that includes controller stuff like before_filters.
