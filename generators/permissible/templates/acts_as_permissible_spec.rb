@@ -74,35 +74,34 @@ describe "acts_as_permissible" do
     end
   end
   <% unless options[:skip_roles] %>
-    describe "<%= role_model_file_name.pluralize %>_list" do
-      before(:each) do
-        @perm.<%= role_model_file_name.pluralize %>_list.should == []
-        @mutables = <%= role_model_name %>.new(:name => "mutables")
-        @mutables.save!
-        @wierdos = <%= role_model_name %>.new(:name => "wierdos")
-        @wierdos.save!
-        @mutables.<%= role_model_file_name.pluralize %> << @wierdos
-      end
+  describe "<%= role_model_file_name.pluralize %>_list" do
+    before(:each) do
+      @perm.<%= role_model_file_name.pluralize %>_list.should == []
+      @mutables = <%= role_model_name %>.new(:name => "mutables")
+      @mutables.save!
+      @wierdos = <%= role_model_name %>.new(:name => "wierdos")
+      @wierdos.save!
+      @mutables.<%= role_model_file_name.pluralize %> << @wierdos
+    end
 
-      after(:each) do
-        @mutables.destroy
-        @wierdos.destroy
-        @perm.<%= role_model_file_name.pluralize %>.reset
-        @perm.<%= role_model_file_name.pluralize %>_list.should == []
-      end
+    after(:each) do
+      @mutables.destroy
+      @wierdos.destroy
+      @perm.<%= role_model_file_name.pluralize %>.reset
+      @perm.<%= role_model_file_name.pluralize %>_list.should == []
+    end
 
-      it "should return the correct list" do
-        @perm.<%= role_model_file_name.pluralize %> << @wierdos
-        @perm.<%= role_model_file_name.pluralize %>_list.size.should == 1
-        @perm.<%= role_model_file_name.pluralize %>_list.should include("wierdos")
-      end
+    it "should return the correct list" do
+      @perm.<%= role_model_file_name.pluralize %> << @wierdos
+      @perm.<%= role_model_file_name.pluralize %>_list.size.should == 1
+      @perm.<%= role_model_file_name.pluralize %>_list.should include("wierdos")
+    end
 
-      it "should return the correct list including parent <%= role_model_file_name.pluralize %> of <%= role_model_file_name.pluralize %> recursively." do
-        @perm.<%= role_model_file_name.pluralize %> << @mutables
-        @perm.<%= role_model_file_name.pluralize %>_list.size.should == 2
-        @perm.<%= role_model_file_name.pluralize %>_list.should include("mutables")
-        @perm.<%= role_model_file_name.pluralize %>_list.should include("wierdos")
-      end
+    it "should return the correct list including parent <%= role_model_file_name.pluralize %> of <%= role_model_file_name.pluralize %> recursively." do
+      @perm.<%= role_model_file_name.pluralize %> << @mutables
+      @perm.<%= role_model_file_name.pluralize %>_list.size.should == 2
+      @perm.<%= role_model_file_name.pluralize %>_list.should include("mutables")
+      @perm.<%= role_model_file_name.pluralize %>_list.should include("wierdos")
     end
   end
   
