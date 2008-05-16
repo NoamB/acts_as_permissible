@@ -74,17 +74,35 @@ describe "acts_as_permissible" do
     end
   end
   <% unless options[:skip_roles] %>
-  describe "<%= role_model_file_name.pluralize %>_list" do
-    it "should return the correct list" do
-      @perm.<%= role_model_file_name.pluralize %>_list.should == []
-      @mutables = <%= role_model_name %>.new(:name => "mutables")
-      @mutables.save!
-      @perm.<%= role_model_file_name.pluralize %> << @mutables
-      @perm.<%= role_model_file_name.pluralize %>_list.size.should == 1
-      @perm.<%= role_model_file_name.pluralize %>_list.should include("mutables")
-      @mutables.destroy
-      @perm.<%= role_model_file_name.pluralize %>.reset
-      @perm.<%= role_model_file_name.pluralize %>_list.should == []
+    describe "<%= role_model_file_name.pluralize %>_list" do
+      before(:each) do
+        @perm.<%= role_model_file_name.pluralize %>_list.should == []
+        @mutables = <%= role_model_name %>.new(:name => "mutables")
+        @mutables.save!
+        @wierdos = <%= role_model_name %>.new(:name => "wierdos")
+        @wierdos.save!
+        @mutables.<%= role_model_file_name.pluralize %> << @wierdos
+      end
+
+      after(:each) do
+        @mutables.destroy
+        @wierdos.destroy
+        @perm.<%= role_model_file_name.pluralize %>.reset
+        @perm.<%= role_model_file_name.pluralize %>_list.should == []
+      end
+
+      it "should return the correct list" do
+        @perm.<%= role_model_file_name.pluralize %> << @wierdos
+        @perm.<%= role_model_file_name.pluralize %>_list.size.should == 1
+        @perm.<%= role_model_file_name.pluralize %>_list.should include("wierdos")
+      end
+
+      it "should return the correct list including parent <%= role_model_file_name.pluralize %> of <%= role_model_file_name.pluralize %> recursively." do
+        @perm.<%= role_model_file_name.pluralize %> << @mutables
+        @perm.<%= role_model_file_name.pluralize %>_list.size.should == 2
+        @perm.<%= role_model_file_name.pluralize %>_list.should include("mutables")
+        @perm.<%= role_model_file_name.pluralize %>_list.should include("wierdos")
+      end
     end
   end
   
@@ -94,6 +112,12 @@ describe "acts_as_permissible" do
       @mutables.save!
       @immutables = <%= role_model_name %>.new(:name => "immutables")
       @immutables.save!
+    end
+    
+    after(:each) do
+      @mutables.destroy
+      @immutables.destroy
+      @perm.<%= role_model_file_name.pluralize %>.reset
     end
     
     it "should return true if member of one" do
@@ -114,12 +138,6 @@ describe "acts_as_permissible" do
     it "should return false if member of some" do
       @perm.<%= role_model_file_name.pluralize %> << @mutables
       @perm.in_<%= role_model_file_name %>?("mutables","immutables").should == false
-    end
-    
-    after(:each) do
-      @mutables.destroy
-      @immutables.destroy
-      @perm.<%= role_model_file_name.pluralize %>.reset
     end
   end
   

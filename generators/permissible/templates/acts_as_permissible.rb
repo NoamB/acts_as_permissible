@@ -69,7 +69,10 @@ module NoamBenAri
         <% unless options[:skip_roles] %>
         def <%= role_model_file_name %>s_list
           list = []
-          <%= role_model_file_name %>s.inject(list) {|list,<%= role_model_file_name %>| list << <%= role_model_file_name %>.name}
+          <%= role_model_file_name %>s.inject(list) do |list,<%= role_model_file_name %>|
+             list << <%= role_model_file_name %>.name
+             <%= role_model_file_name %>.<%= role_model_file_name.pluralize %>_list.inject(list) {|list,<%= role_model_file_name %>| list << <%= role_model_file_name %>}
+          end
           list.uniq
         end
         
