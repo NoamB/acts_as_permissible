@@ -1,6 +1,11 @@
 ActsAsPermissible
 =================
 
+Source:
+http://github.com/NoamB/acts_as_permissible/tree/master
+More information at:
+http://github.com/NoamB/acts_as_permissible/wikis
+
 This plugin enables any activerecord model to have permissions.
 It provides a set of methods for querying the model's permissions.
 In addition, the plugin can generate roles support, which turns in into a full RBAC (Role Based Access Control) solution.
@@ -59,10 +64,5 @@ And with roles support:
 	@user.in_role?("publisher","advertiser") # => false
 	@user.in_any_role?("publisher","advertiser") => true
 	@user.full_permissions_hash() # will return a merged hash of user and roles permissions.
-	
-Copyright (c) 2008 Noam Ben-Ari, released under the MIT license
 
-        
-        TODO:
-		# acts_as_permissible_system that includes controller stuff like before_filters.
-		# admin interface scaffold for permissions and roles.
+Copyright (c) 2008 Noam Ben-Ari, released under the MIT license

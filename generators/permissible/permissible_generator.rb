@@ -43,8 +43,8 @@ class PermissibleGenerator < Rails::Generator::NamedBase
                   File.join('lib',
                             "acts_as_permissible.rb")
       # m.template 'initializer.rb',
-      #             File.join('config/initializers',
-      #                       "acts_as_permissible_init.rb")
+      #                   File.join('config/initializers',
+      #                             "acts_as_permissible_init.rb")
       unless options[:skip_roles]
         m.template 'role_model.rb',
                     File.join('app/models',
