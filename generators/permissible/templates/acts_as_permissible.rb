@@ -16,6 +16,8 @@ module NoamBenAri
           <% end %>
           include NoamBenAri::Acts::Permissible::InstanceMethods
           extend NoamBenAri::Acts::Permissible::SingletonMethods
+          
+          alias_method :full_permissions_hash, :permissions_hash
         end
       end
       
@@ -37,8 +39,15 @@ module NoamBenAri
       module InstanceMethods
         
         # returns permissions in hash form
+        # from all levels recursively
         def permissions_hash
-          @permissions_hash ||= <%= table_name %>.inject({}) { |hsh,perm| hsh.merge(perm.to_hash) }.symbolize_keys!
+          @permissions_hash ||= lambda do
+            @permissions_hash = <%= table_name %>.inject({}) { |hsh,perm| hsh.merge(perm.to_hash) }.symbolize_keys!
+            <%= role_model_file_name %>s.each do |<%= role_model_file_name %>|
+              merge_permissions!(<%= role_model_file_name %>.permissions_hash)
+            end
+            @permissions_hash
+          end.call()
         end
         
         # accepts a permission identifier string or an array of permission identifier strings
@@ -83,14 +92,7 @@ module NoamBenAri
         def in_any_<%= role_model_file_name %>?(*<%= role_model_file_name %>_names)
           <%= role_model_file_name %>_names.any? {|<%= role_model_file_name %>| <%= role_model_file_name %>s_list.include?(<%= role_model_file_name %>) }
         end
-        
-        def full_permissions_hash
-          permissions_hash
-          <%= role_model_file_name.pluralize %>.each do |<%= role_model_file_name %>|
-            merge_permissions!(<%= role_model_file_name %>.full_permissions_hash)
-          end
-          permissions_hash
-        end
+
         <% end %>
         private
         # Nilifies permissions_hash instance variable.
