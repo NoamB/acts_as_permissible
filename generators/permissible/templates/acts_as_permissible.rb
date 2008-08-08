@@ -43,10 +43,10 @@ module NoamBenAri
         def permissions_hash
           @permissions_hash ||= lambda do
             @permissions_hash = <%= table_name %>.inject({}) { |hsh,perm| hsh.merge(perm.to_hash) }.symbolize_keys!
-            <%= role_model_file_name %>s.each do |<%= role_model_file_name %>|
+            <% unless options[:skip_roles] -%><%= role_model_file_name %>s.each do |<%= role_model_file_name %>|
               merge_permissions!(<%= role_model_file_name %>.permissions_hash)
             end
-            @permissions_hash
+            <% end -%>@permissions_hash
           end.call()
         end
         
